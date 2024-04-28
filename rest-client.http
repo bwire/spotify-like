@@ -1,0 +1,18 @@
+GET http://localhost:3000
+
+### FETCH ALL SONGS
+GET http://localhost:3000/songs
+
+### FETCH SONG BY ID
+GET http://localhost:3000/songs/1
+
+### CREATE A NEW SONG
+POST http://localhost:3000/songs
+Content-Type: application/json
+
+{
+    "title": "Gypsy",
+    "artists": ["Merciful Fate"],
+    "releaseDate": "1984-09-29",
+    "duration": "03:15"
+}
