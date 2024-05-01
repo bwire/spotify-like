@@ -9,6 +9,9 @@ import { AppService } from './app.service';
 import { SongsModule } from './songs/songs.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { DevConfigService } from './common/providers/devConfig.service';
+
+const devPort = { port: 3000 };
+const prodPort = { port: 4000 };
 @Module({
   imports: [SongsModule],
   controllers: [AppController],
@@ -17,6 +20,11 @@ import { DevConfigService } from './common/providers/devConfig.service';
     {
       provide: DevConfigService,
       useClass: DevConfigService,
+    },
+    {
+      provide: 'PORT_CONFIG',
+      useFactory: () =>
+        process.env.NODE_ENV === 'development' ? devPort : prodPort,
     },
   ],
 })
