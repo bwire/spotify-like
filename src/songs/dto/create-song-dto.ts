@@ -13,6 +13,7 @@ export class CreateSongDto {
 
   @IsNotEmpty()
   @IsArray()
+  @IsString({ each: true })
   readonly artists: string[];
 
   @IsNotEmpty()
