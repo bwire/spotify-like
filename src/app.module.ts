@@ -11,6 +11,7 @@ import { SongsModule } from './songs/songs.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { DevConfigService } from './common/providers/devConfig.service';
 import { DataSource } from 'typeorm';
+import { Song } from './songs/song.entity';
 
 const devPort = { port: 3000 };
 const prodPort = { port: 4000 };
@@ -23,7 +24,7 @@ const prodPort = { port: 4000 };
       username: 'postgres',
       password: 'postgres',
       database: 'spotify-like',
-      entities: [],
+      entities: [Song],
       synchronize: true,
     }),
     SongsModule,
