@@ -4,7 +4,7 @@ GET http://localhost:3000
 GET http://localhost:3000/songs
 
 ### FETCH SONG BY ID
-GET http://localhost:3000/songs/23
+GET http://localhost:3000/songs/2
 
 ### CREATE A NEW SONG
 POST http://localhost:3000/songs
@@ -14,5 +14,17 @@ Content-Type: application/json
     "title": "Gypsy",
     "artists": ["Merciful Fate", "Dio"],
     "releaseDate": "1984-09-29",
-    "duration": "03:15"
+    "duration": "03:15",
+    "lyrics": "Gypsy"
 }
+
+### UPDATE A SONG
+PUT http://localhost:3000/songs/4
+Content-Type: application/json
+
+{
+    "lyrics": "Gypsy, Gypsy"
+}
+
+### DELETE SONG BY ID
+DELETE http://localhost:3000/songs/3
