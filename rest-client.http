@@ -1,7 +1,7 @@
 GET http://localhost:3000
 
 ### FETCH ALL SONGS
-GET http://localhost:3000/songs
+GET http://localhost:3000/songs?limit=2&page=1
 
 ### FETCH SONG BY ID
 GET http://localhost:3000/songs/2
