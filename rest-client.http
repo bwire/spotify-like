@@ -1,7 +1,7 @@
 GET http://localhost:3000
 
 ### FETCH ALL SONGS
-GET http://localhost:3000/songs?limit=2&page=1
+GET http://localhost:3000/songs?limit=2&page=2
 
 ### FETCH SONG BY ID
 GET http://localhost:3000/songs/2
@@ -11,7 +11,7 @@ POST http://localhost:3000/songs
 Content-Type: application/json
 
 {
-    "title": "Gypsy",
+    "title": "Gypsy 5",
     "artists": ["Merciful Fate", "Dio"],
     "releaseDate": "1984-09-29",
     "duration": "03:15",
@@ -19,11 +19,11 @@ Content-Type: application/json
 }
 
 ### UPDATE A SONG
-PUT http://localhost:3000/songs/4
+PUT http://localhost:3000/songs/7
 Content-Type: application/json
 
 {
-    "lyrics": "Gypsy, Gypsy"
+    "releasedDate": "1984-09-30"
 }
 
 ### DELETE SONG BY ID

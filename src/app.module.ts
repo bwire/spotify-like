@@ -12,6 +12,10 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { DevConfigService } from './common/providers/devConfig.service';
 import { DataSource } from 'typeorm';
 import { Song } from './songs/song.entity';
+import { Artist } from './artists/artist.entity';
+import { User } from './users/user.entity';
+import { PlaylistsModule } from './playlists/playlists.module';
+import { Playlist } from './playlists/playlist.entity';
 
 const devPort = { port: 3000 };
 const prodPort = { port: 4000 };
@@ -24,10 +28,11 @@ const prodPort = { port: 4000 };
       username: 'postgres',
       password: 'postgres',
       database: 'spotify-like',
-      entities: [Song],
+      entities: [Song, Artist, User, Playlist],
       synchronize: true,
     }),
     SongsModule,
+    PlaylistsModule,
   ],
   controllers: [AppController],
   providers: [
