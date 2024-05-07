@@ -28,3 +28,13 @@ Content-Type: application/json
 
 ### DELETE SONG BY ID
 DELETE http://localhost:3000/songs/3
+
+### CREATE A PLAYLIST
+POST http://localhost:3000/playlists
+Content-Type: application/json
+
+{
+    "name": "My fav",
+    "songs": [4, 8],
+    "user": 1
+}
