@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { QueryBuilder, Repository, UpdateResult } from 'typeorm';
+import { In, QueryBuilder, Repository, UpdateResult } from 'typeorm';
 import { Song } from './song.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateSongDto } from './dto/create-song-dto';
@@ -9,42 +9,50 @@ import {
   Pagination,
   paginate,
 } from 'nestjs-typeorm-paginate';
+import { Artist } from 'src/artists/artist.entity';
 
 @Injectable()
 export class SongsService {
-  constructor(@InjectRepository(Song) private repository: Repository<Song>) {}
+  constructor(
+    @InjectRepository(Song) private songsRepository: Repository<Song>,
+    @InjectRepository(Artist) private artistsRepository: Repository<Artist>,
+  ) {}
 
   findAll(): Promise<Song[]> {
-    return this.repository.find();
+    return this.songsRepository.find();
   }
 
   findById(id: number): Promise<Song> {
-    return this.repository.findOneBy({ id });
+    return this.songsRepository.findOneBy({ id });
   }
 
-  create(dto: CreateSongDto): Promise<Song> {
+  async create(dto: CreateSongDto): Promise<Song> {
     const song = new Song();
 
     song.title = dto.title;
     song.duration = dto.duration;
-    song.artists = dto.artists;
     song.lyrics = dto.lyrics;
     song.releasedDate = dto.releaseDate;
 
-    return this.repository.save(song);
+    const artists = await this.artistsRepository.findBy({
+      id: In(dto.artists),
+    });
+    song.artists = artists;
+
+    return this.songsRepository.save(song);
   }
 
   updateOne(id: number, dto: UpdateSongDto): Promise<UpdateResult> {
-    return this.repository.update(id, dto);
+    return this.songsRepository.update(id, dto);
   }
 
   deleteOne(id: number): Promise<void> {
-    this.repository.delete(id);
+    this.songsRepository.delete(id);
     return;
   }
 
   async paginate(options: IPaginationOptions): Promise<Pagination<Song>> {
-    const builder = this.repository.createQueryBuilder('s');
+    const builder = this.songsRepository.createQueryBuilder('s');
     builder.orderBy('s.releasedDate', 'DESC');
 
     return paginate(builder, options);
