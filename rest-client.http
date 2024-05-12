@@ -11,11 +11,11 @@ POST http://localhost:3000/songs
 Content-Type: application/json
 
 {
-    "title": "Gypsy 5",
-    "artists": ["Merciful Fate", "Dio"],
+    "title": "Welocme princess of hell",
+    "artists": [1, 2],
     "releaseDate": "1984-09-29",
-    "duration": "03:15",
-    "lyrics": "Gypsy"
+    "duration": "05:15",
+    "lyrics": "Do not break the oath"
 }
 
 ### UPDATE A SONG
@@ -37,4 +37,15 @@ Content-Type: application/json
     "name": "My fav",
     "songs": [4, 8],
     "user": 1
+}
+
+### SIGN UP USER
+POST http://localhost:3000/auth/signup
+Content-Type: application/json
+
+{
+    "firstName": "Barbed",
+    "lastName": "Wire",
+    "email": "ibrave@yandex.com",
+    "password": "testpass"
 }
