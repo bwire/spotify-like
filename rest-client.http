@@ -49,3 +49,12 @@ Content-Type: application/json
     "email": "ibrave@yandex.com",
     "password": "testpass"
 }
+
+### SIGN IN USER
+POST http://localhost:3000/auth/signin
+Content-Type: application/json
+
+{
+    "email": "ibrave@yandex.com",
+    "password": "testpasss"
+}
