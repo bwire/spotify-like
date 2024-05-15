@@ -4,6 +4,7 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
+import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -18,6 +19,8 @@ import { PlaylistsModule } from './playlists/playlists.module';
 import { Playlist } from './playlists/playlist.entity';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { AuthService } from './auth/auth.service';
+import { JwtStrategy } from './auth/jwt.strategy';
 
 const devPort = { port: 3000 };
 const prodPort = { port: 4000 };
@@ -33,6 +36,7 @@ const prodPort = { port: 4000 };
       entities: [Song, Artist, User, Playlist],
       synchronize: true,
     }),
+    PassportModule,
     SongsModule,
     PlaylistsModule,
     AuthModule,
@@ -40,6 +44,8 @@ const prodPort = { port: 4000 };
   ],
   controllers: [AppController],
   providers: [
+    AuthService,
+    JwtStrategy,
     AppService,
     {
       provide: DevConfigService,

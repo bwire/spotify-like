@@ -4,6 +4,7 @@ import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
+import { AuthResult } from './auth.types';
 
 @Controller('auth')
 export class AuthController {
@@ -18,7 +19,7 @@ export class AuthController {
   }
 
   @Post('signin')
-  signIn(@Body() dto: LoginDto): Promise<User> {
+  signIn(@Body() dto: LoginDto): Promise<AuthResult> {
     return this.authService.login(dto);
   }
 }
