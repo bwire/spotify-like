@@ -10,7 +10,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SongsModule } from './songs/songs.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
-import { DevConfigService } from './common/providers/devConfig.service';
 import { DataSource } from 'typeorm';
 import { Song } from './songs/song.entity';
 import { Artist } from './artists/artist.entity';
@@ -19,11 +18,7 @@ import { PlaylistsModule } from './playlists/playlists.module';
 import { Playlist } from './playlists/playlist.entity';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { AuthService } from './auth/auth.service';
-import { JwtStrategy } from './auth/jwt.strategy';
 
-const devPort = { port: 3000 };
-const prodPort = { port: 4000 };
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -43,20 +38,7 @@ const prodPort = { port: 4000 };
     UsersModule,
   ],
   controllers: [AppController],
-  providers: [
-    AuthService,
-    JwtStrategy,
-    AppService,
-    {
-      provide: DevConfigService,
-      useClass: DevConfigService,
-    },
-    {
-      provide: 'PORT_CONFIG',
-      useFactory: () =>
-        process.env.NODE_ENV === 'development' ? devPort : prodPort,
-    },
-  ],
+  providers: [AppService],
 })
 export class AppModule implements NestModule {
   constructor(private dataSource: DataSource) {

@@ -56,5 +56,5 @@ Content-Type: application/json
 
 {
     "email": "ibrave@yandex.com",
-    "password": "testpasss"
+    "password": "testpass"
 }
