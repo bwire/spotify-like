@@ -1,7 +1,6 @@
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { LoginDto } from './dto/login.dto';
 import { UsersService } from 'src/users/users.service';
 import { AuthResult, JwtPayload } from './auth.types';
 import { AUTH_CONSTANTS } from './auth.constants';
@@ -17,27 +16,22 @@ export class AuthService {
   async validateUser(email: string, password: string): Promise<User> {
     const user = await this.userService.findOne(email);
     const passwordMatched = await bcrypt.compare(password, user.password);
-    if (passwordMatched) {
-      delete user.password;
-      return user;
+    if (!passwordMatched) {
+      throw new UnauthorizedException("Password doesn't match");
     }
-    return null;
+    delete user.password;
+    return user;
   }
 
-  async login(dto: LoginDto): Promise<AuthResult> {
-    const user = await this.userService.findOne(dto.email);
-    const passwordMatched = await bcrypt.compare(dto.password, user.password);
-    if (passwordMatched) {
-      const payload: JwtPayload = {
-        email: user.email,
-        sub: user.id,
-      };
-      return {
-        accessToken: this.jwtService.sign(payload, {
-          secret: AUTH_CONSTANTS.SECRET,
-        }),
-      };
-    }
-    throw new UnauthorizedException('Password does not match');
+  async login(user: User): Promise<AuthResult> {
+    const payload: JwtPayload = {
+      email: user.email,
+      sub: user.id,
+    };
+    return {
+      accessToken: this.jwtService.sign(payload, {
+        secret: AUTH_CONSTANTS.SECRET,
+      }),
+    };
   }
 }
