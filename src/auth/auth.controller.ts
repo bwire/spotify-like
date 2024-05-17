@@ -5,7 +5,7 @@ import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { AuthResult } from './auth.types';
-import { JwtAuthGuard } from './jwt-guard';
+import { LocalAuthGuard } from './guards/local.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -20,7 +20,7 @@ export class AuthController {
   }
 
   @Post('signin')
-  //@UseGuards(JwtAuthGuard)
+  @UseGuards(LocalAuthGuard)
   signIn(@Body() dto: LoginDto): Promise<AuthResult> {
     return this.authService.login(dto);
   }
