@@ -4,7 +4,7 @@ import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
 import { AuthResult } from './auth.types';
-import { LocalAuthGuard } from './guards/local.guard';
+import { LocalAuthGuard } from './guards/local-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -18,8 +18,8 @@ export class AuthController {
     return this.usersService.create(dto);
   }
 
-  @Post('signin')
   @UseGuards(LocalAuthGuard)
+  @Post('signin')
   signIn(@Request() { user }): Promise<AuthResult> {
     return this.authService.login(user);
   }
