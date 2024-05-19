@@ -4,10 +4,12 @@ export interface AuthResult {
 
 export interface JwtPayload {
   email: string;
-  sub: number;
+  userId: number;
+  artistId?: number;
 }
 
 export interface RequestUserData {
   userId: number;
   email: string;
+  artistId: number;
 }

@@ -5,12 +5,14 @@ import { UsersService } from 'src/users/users.service';
 import { AuthResult, JwtPayload } from './auth.types';
 import { AUTH_CONSTANTS } from './auth.constants';
 import { User } from 'src/users/user.entity';
+import { ArtistsService } from 'src/artists/artists.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UsersService,
     private jwtService: JwtService,
+    private userService: UsersService,
+    private artistsService: ArtistsService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<User> {
@@ -26,8 +28,14 @@ export class AuthService {
   async login(user: User): Promise<AuthResult> {
     const payload: JwtPayload = {
       email: user.email,
-      sub: user.id,
+      userId: user.id,
     };
+
+    const artist = await this.artistsService.findArtist(user.id);
+    if (artist) {
+      payload.artistId = artist.id;
+    }
+
     return {
       accessToken: this.jwtService.sign(payload, {
         secret: AUTH_CONSTANTS.SECRET,

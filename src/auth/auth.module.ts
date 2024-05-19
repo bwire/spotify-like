@@ -7,10 +7,12 @@ import { AUTH_CONSTANTS } from './auth.constants';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { PassportModule } from '@nestjs/passport';
+import { ArtistsModule } from 'src/artists/artists.module';
 
 @Module({
   imports: [
     UsersModule,
+    ArtistsModule,
     PassportModule,
     JwtModule.register({
       secret: AUTH_CONSTANTS.SECRET,
