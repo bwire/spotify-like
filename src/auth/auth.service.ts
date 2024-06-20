@@ -1,11 +1,13 @@
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
+import * as speakeasy from 'speakeasy';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
-import { AuthResult, JwtPayload } from './auth.types';
+import { AuthResult, Enable2FAType, JwtPayload } from './auth.types';
 import { AUTH_CONSTANTS } from './auth.constants';
 import { User } from 'src/users/user.entity';
 import { ArtistsService } from 'src/artists/artists.service';
+import { UpdateResult } from 'typeorm';
 
 @Injectable()
 export class AuthService {
@@ -41,5 +43,22 @@ export class AuthService {
         secret: AUTH_CONSTANTS.SECRET,
       }),
     };
+  }
+
+  async enable2FA(userId: number): Promise<Enable2FAType> {
+    const user = await this.userService.findById(userId);
+
+    if (!user.is2FAEnabled) {
+      const secret = speakeasy.generateSecret();
+      console.log('New secret', secret);
+      user.twoFASecret = secret.base32;
+      await this.userService.updateSecretKey(user.id, user.twoFASecret);
+    }
+
+    return { secret: user.twoFASecret };
+  }
+
+  async disable2FA(userId: number): Promise<UpdateResult> {
+    return this.userService.disable2FA(userId);
   }
 }
