@@ -3,7 +3,12 @@ import * as bcrypt from 'bcryptjs';
 import * as speakeasy from 'speakeasy';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
-import { AuthResult, Enable2FAType, JwtPayload } from './auth.types';
+import {
+  AuthResult,
+  Enable2FAType,
+  JwtPayload,
+  VerifyResult,
+} from './auth.types';
 import { AUTH_CONSTANTS } from './auth.constants';
 import { User } from 'src/users/user.entity';
 import { ArtistsService } from 'src/artists/artists.service';
@@ -38,6 +43,13 @@ export class AuthService {
       payload.artistId = artist.id;
     }
 
+    if (user.is2FAEnabled && user.twoFASecret) {
+      return {
+        validate2FA: 'http://localhost:3000/auth/verify-2fa',
+        message:
+          'Please send the one-time password/token from your Google Authenticator App',
+      };
+    }
     return {
       accessToken: this.jwtService.sign(payload, {
         secret: AUTH_CONSTANTS.SECRET,
@@ -60,5 +72,21 @@ export class AuthService {
 
   async disable2FA(userId: number): Promise<UpdateResult> {
     return this.userService.disable2FA(userId);
+  }
+
+  async verify2FA(userId: number, token: string): Promise<VerifyResult> {
+    try {
+      const user = await this.userService.findById(userId);
+
+      console.log('fcreds', user, token);
+      const verified = speakeasy.totp.verify({
+        secret: user.twoFASecret,
+        token,
+        encoding: 'base32',
+      });
+      return { verified };
+    } catch (e) {
+      throw new UnauthorizedException('Error verifying token');
+    }
   }
 }

@@ -1,6 +1,13 @@
-export interface AuthResult {
+interface AuthGeneralResult {
   accessToken: string;
 }
+
+interface Auth2FAResult {
+  validate2FA: string;
+  message: string;
+}
+
+export type AuthResult = AuthGeneralResult | Auth2FAResult;
 
 export interface JwtPayload {
   email: string;
@@ -16,4 +23,12 @@ export interface RequestUserData {
 
 export type Enable2FAType = {
   secret: string;
+};
+
+export type ValidateTokenDto = {
+  token: string;
+};
+
+export type VerifyResult = {
+  verified: boolean;
 };
