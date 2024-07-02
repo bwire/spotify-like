@@ -32,6 +32,10 @@ export class AuthService {
     return user;
   }
 
+  async validateUserByApiKey(apiKey: string): Promise<User> {
+    return this.userService.findByApiKey(apiKey);
+  }
+
   async login(user: User): Promise<AuthResult> {
     const payload: JwtPayload = {
       email: user.email,

@@ -1,5 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Repository, UpdateOptions, UpdateResult } from 'typeorm';
+import { v4 as uuid4 } from 'uuid';
 import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user-dto';
@@ -15,7 +16,10 @@ export class UsersService {
     const salt = await bcrypt.genSalt();
     dto.password = await bcrypt.hash(dto.password, salt);
 
-    const user = await this.usersRepository.save(dto);
+    const user = await this.usersRepository.save({
+      ...dto,
+      apiKey: uuid4(),
+    });
     delete user.password;
     return user;
   }
@@ -30,6 +34,14 @@ export class UsersService {
 
   async findById(id: number): Promise<User> {
     const user = await this.usersRepository.findOneBy({ id });
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+    return user;
+  }
+
+  async findByApiKey(apiKey: string): Promise<User> {
+    const user = await this.usersRepository.findOneBy({ apiKey });
     if (!user) {
       throw new UnauthorizedException('User not found');
     }

@@ -1,4 +1,11 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { CreateUserDto } from 'src/users/dto/create-user-dto';
 import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
@@ -12,6 +19,7 @@ import {
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { UpdateResult } from 'typeorm';
+import { ApiKeyGuard } from './guards/bearer.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -50,5 +58,15 @@ export class AuthController {
     @Body() dto: ValidateTokenDto,
   ): Promise<VerifyResult> {
     return this.authService.verify2FA(user.id, dto.token);
+  }
+
+  @UseGuards(ApiKeyGuard)
+  @Get('profile')
+  getProfile(@Request() { user }) {
+    delete user.password;
+    return {
+      message: 'Authenticated with API key',
+      user,
+    };
   }
 }
