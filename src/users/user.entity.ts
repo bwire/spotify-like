@@ -31,4 +31,7 @@ export class User {
 
   @Column({ nullable: true })
   apiKey: string;
+
+  @Column()
+  phone: string;
 }
