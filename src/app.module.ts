@@ -16,6 +16,8 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ArtistsModule } from './artists/artists.module';
 import { dataSourceOptions } from 'db/data-source';
+import { SeedService } from './seed/seed.service';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -26,9 +28,10 @@ import { dataSourceOptions } from 'db/data-source';
     AuthModule,
     UsersModule,
     ArtistsModule,
+    SeedModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, SeedService],
 })
 export class AppModule implements NestModule {
   constructor(private dataSource: DataSource) {
