@@ -20,6 +20,7 @@ import { typeOrmAsyncConfig } from 'db/data-source';
 import { SeedService } from './seed/seed.service';
 import { SeedModule } from './seed/seed.module';
 import configuration from './config/configuration';
+import { validate } from 'env.validation';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import configuration from './config/configuration';
       envFilePath: ['.env.development', '.env.production'],
       isGlobal: true,
       load: [configuration],
+      validate: validate,
     }),
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
     PassportModule,
