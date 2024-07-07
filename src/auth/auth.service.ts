@@ -9,7 +9,6 @@ import {
   JwtPayload,
   VerifyResult,
 } from './auth.types';
-import { AUTH_CONSTANTS } from './auth.constants';
 import { User } from 'src/users/user.entity';
 import { ArtistsService } from 'src/artists/artists.service';
 import { UpdateResult } from 'typeorm';
@@ -58,7 +57,7 @@ export class AuthService {
     }
     return {
       accessToken: this.jwtService.sign(payload, {
-        secret: AUTH_CONSTANTS.SECRET,
+        secret: this.configService.get<string>('secret'),
       }),
     };
   }
