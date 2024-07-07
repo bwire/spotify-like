@@ -13,10 +13,12 @@ import { AUTH_CONSTANTS } from './auth.constants';
 import { User } from 'src/users/user.entity';
 import { ArtistsService } from 'src/artists/artists.service';
 import { UpdateResult } from 'typeorm';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
+    private configService: ConfigService,
     private jwtService: JwtService,
     private userService: UsersService,
     private artistsService: ArtistsService,
@@ -92,5 +94,11 @@ export class AuthService {
     } catch (e) {
       throw new UnauthorizedException('Error verifying token');
     }
+  }
+
+  getEnvVariables() {
+    return {
+      port: this.configService.get<number>('port'),
+    };
   }
 }
