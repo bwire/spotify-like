@@ -20,8 +20,10 @@ import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { UpdateResult } from 'typeorm';
 import { ApiKeyGuard } from './guards/bearer.guard';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
+@ApiTags('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
@@ -29,6 +31,11 @@ export class AuthController {
   ) {}
 
   @Post('signup')
+  @ApiOperation({ summary: 'Register a new user' })
+  @ApiResponse({
+    status: 201,
+    description: 'Returns the user in the response',
+  })
   signUp(@Body() dto: CreateUserDto): Promise<User> {
     return this.usersService.create(dto);
   }

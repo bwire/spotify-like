@@ -14,6 +14,7 @@ import {
   Scope,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { UpdateResult } from 'typeorm';
 import { SongsService } from './songs.service';
 import { CreateSongDto } from './dto/create-song-dto';
@@ -23,6 +24,7 @@ import { Pagination } from 'nestjs-typeorm-paginate';
 import { JwtArtistGuard } from 'src/auth/guards/jwt-artist.guard';
 
 @Controller({ path: 'songs', scope: Scope.REQUEST })
+@ApiTags('songs')
 export class SongsController {
   constructor(private songsService: SongsService) {}
 
