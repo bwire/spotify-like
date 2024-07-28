@@ -22,9 +22,17 @@ export class User {
   @Column()
   lastName: string;
 
+  @ApiProperty({
+    example: 'jane_doe@gmail.com',
+    description: 'Provide the email of the user',
+  })
   @Column({ unique: true })
   email: string;
 
+  @ApiProperty({
+    example: 'test123#@',
+    description: 'Provide the password of the user',
+  })
   @Column()
   @Exclude()
   password: string;

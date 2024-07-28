@@ -42,6 +42,11 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('signin')
+  @ApiOperation({ summary: 'Login user' })
+  @ApiResponse({
+    status: 200,
+    description: 'It will give you the access_token in the response',
+  })
   signIn(@Request() { user }): Promise<AuthResult> {
     return this.authService.login(user);
   }
